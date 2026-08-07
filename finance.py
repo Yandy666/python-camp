@@ -1,4 +1,5 @@
 import json
+import re
 from datetime import datetime
 
 DATA_FILE = "expenses.json"
@@ -25,7 +26,14 @@ def main():
         print("q. 退出")
         choice = input("请选择：")
         if choice == "1":
-            amount = float(input("金额："))
+            amount_str = input("花了多少：")            # 比如输入 "午饭花了36.5元"
+            match = re.search(r"[\d.]+", amount_str)    # 匹配连续的数字和小数点
+            if match:
+                amount = float(match.group())
+                print(f"识别出金额：{amount}")
+            else:
+                print("没识别出金额，请手动输入：")
+                amount = float(input("金额："))
             category = input("类别（如 餐饮/交通/娱乐）：")
             note = input("备注（可跳过）：")
             today = datetime.now().strftime("%Y-%m-%d")
